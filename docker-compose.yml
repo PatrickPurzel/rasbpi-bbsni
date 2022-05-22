@@ -1,5 +1,19 @@
 version: '3.3'
 services:
+
+  probe:
+    image: woahbase/alpine-rpigpio:armhf
+    privileged: true
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    entrypoint: /bin/bash
+    volumes:
+      - probevol:/appl
+      - /dev/gpiomem:/dev/gpiomem
+      - /dev/mem:/dev/mem
+    #environment:
+      #- --cap-add SYS_RAWIO
+
   web:
     image: nginx
     volumes:
@@ -49,3 +63,4 @@ services:
 # Names our volume
 volumes:
   my-db:
+  probevol:
