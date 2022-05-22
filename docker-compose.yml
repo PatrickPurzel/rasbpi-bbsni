@@ -2,7 +2,9 @@ version: '3.3'
 services:
 
   probe:
-    image: woahbase/alpine-rpigpio:armhf
+    build:
+      context: ./raspi-gpio
+      dockerfile: Dockerfile 
     privileged: true
     stdin_open: true # docker run -i
     tty: true        # docker run -t
