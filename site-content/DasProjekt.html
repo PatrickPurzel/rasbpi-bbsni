@@ -101,15 +101,45 @@
 
        }
        
-</style>
+       .glass{
+           background-color: #DDD;
+           color: black;
+        -moz-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        -webkit-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        border-radius: 40px;
+        -moz-border-radius: 40px;
+        -webkit-border-radius: 40px;
+        width: 25%;
+        height: auto;
+        text-align: center;
+        border: solid rgb(64, 107, 46) 5px;
+        padding: 5px;
+        display: inline-block;
+        margin-right: 4%;
+       }
 
+       .rasp{
+           position: absolute;
+           width: 20%;
+           margin-right: 20%;
+           
+       }
+
+       .datbank{
+           position: absolute;
+           margin-top: 15%;
+           margin-left: 4%;
+           
+       }
+</style>        
 </head>
 
 <body>
     
-<div class="element effekt">
+<div class="element-effekt">
     <h1 class="maintheme">
-        
+        <div class="ubschrift">  
         <a href="index.html">
 
         <div class="Projekt"> Projekt: Messwerte 
@@ -121,9 +151,13 @@
     <div class="Task-2"> <a href="RaspberryPi.html"> |Raspberry Pi| </a> </div>
     <div class="Task-3"> <a href="Datenbank.html"> |Datenbank|</a> </div>
     <div class="Task-4"> <a href="Doku.html"> |Doku| </a></div>
-
+</div>
 </div>
 
+<div class="glass"> Test test test test test test test test test test test test test test test test test test test test test test test test test  Test test test test test test test test test test test test test test test test test test test test test test test test test </div>
+<div class="glass"> Test test test test test test test test test test test test test test test test test test test test test test test test test  Test test test test test test test test test test test test test test test test test test test test test test test test test </div>
+<img src="http://ui4free.com/storage/public/images/raspberry-pi-4-model-b_1632930459.jpg" class="rasp">
+<img src="data:image/png;base64,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" class="datbank">
 <img src="https://wallpapercave.com/wp/wp1864223.jpg"
 class="hintergrund">
 </body>
