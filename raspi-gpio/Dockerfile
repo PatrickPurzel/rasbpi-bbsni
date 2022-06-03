@@ -10,9 +10,10 @@ RUN set -xe \
     && apk add --no-cache --purge curl ca-certificates musl wiringpi \
     && rm -rf /var/cache/apk/* /tmp/*
 #
-WORKDIR /usr/app/src
-#
-COPY test-connector.py ./
+COPY requirements.txt /opt/app/requirements.txt
+WORKDIR /opt/app
+RUN pip3 install -r requirements.txt
+COPY test-connector.py opt/app/test-connector.py
 
 # ENTRYPOINT ["/init"]
 # ENTRYPOINT ["/usr/bin/python"]
