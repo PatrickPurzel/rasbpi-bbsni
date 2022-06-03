@@ -1,4 +1,3 @@
-from readline import insert_text
 import paho.mqtt.client as mqtt
 import time
 from gpiozero import CPUTemperature

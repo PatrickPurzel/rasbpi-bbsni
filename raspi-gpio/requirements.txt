@@ -1,7 +1,6 @@
 ###### Requirements without Version Specifiers ######
 
-insert_text
-paho.mqtt.client
+paho-mqtt
 gpiozero
 mysql.connector
 

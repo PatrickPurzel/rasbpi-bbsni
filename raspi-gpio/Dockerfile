@@ -13,7 +13,7 @@ RUN set -xe \
 COPY requirements.txt /opt/app/requirements.txt
 WORKDIR /opt/app
 RUN pip3 install -r requirements.txt
-COPY test-connector.py opt/app/test-connector.py
+COPY test-connector.py /opt/app/test-connector.py
 #
 
 # ENTRYPOINT ["/init"]
