@@ -14,6 +14,7 @@ COPY requirements.txt /opt/app/requirements.txt
 WORKDIR /opt/app
 RUN pip3 install -r requirements.txt
 COPY test-connector.py opt/app/test-connector.py
+#
 
 # ENTRYPOINT ["/init"]
 # ENTRYPOINT ["/usr/bin/python"]
