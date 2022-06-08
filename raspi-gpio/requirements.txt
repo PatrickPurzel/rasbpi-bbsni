@@ -3,5 +3,7 @@
 paho-mqtt
 gpiozero
 mysql.connector
+pyserial
+RPi.GPIO
 
 ###### Requirements with Version Specifiers ######

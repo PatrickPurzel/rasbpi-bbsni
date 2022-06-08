@@ -5,18 +5,23 @@ import mysql.connector
 from mysql.connector import Error
 
 # Define MQTT Broker location
-c_host=     "localhost"
+c_host=     "mosquitto"
 c_port=     1883
 c_timeout=  60
 
+#connection = None
+#cursor = None
+
+
 # Create Table if non existent 
 def create_table(table_connection, table_name):
-    cursor = table_connection.cursor()
+    #cursor = table_connection.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS test_table1 (data_id INT, temprature FLOAT, time INT)")
+    connection.commit()
 
 # Insert Value into given Table
 def table_insert(table_connection, val_temp, val_time):
-    cursor = table_connection.cursor()
+    #cursor = table_connection.cursor()
     insert_txt = "INSERT INTO test_table1 (temprature, time) VALUES (%s, %s)"
     insert_val = (val_temp, val_time)
     cursor.execute(insert_txt, insert_val)
@@ -34,9 +39,9 @@ def pub_send(topic, payload, qos):
 
 # Connecting to MySQL Database
 def create_connection(host_name, user_name, user_password, host_port, db_name):
-    connection = None
     try:
-        connection = mysql.connector.connect(
+        #global connection
+        conn = mysql.connector.connect(
             host=host_name,
             user=user_name,
             passwd=user_password,
@@ -47,21 +52,32 @@ def create_connection(host_name, user_name, user_password, host_port, db_name):
     except Error as e:
         print(f"The error '{e}' occurred")
 
-    return connection
+    return conn
+
+def init():
+    global cursor
+    global connection
+    global client
+    # Connecting to Database and init process
+    connection = create_connection("sysman-db", "user", "password", 3306, "test_database")
+    cursor = connection.cursor()
+
+    create_table(connection, "test_table1")
+    
+
+    # Init MQTT Connection
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.connect(c_host, c_port, c_timeout)
 
 ### MAIN ###
 
-# Connecting to Database and init process
-connection = create_connection("localhost", "user", "password", 33306, "test_database")
-create_table(connection, "test_table1")
+init()
 
 # Insert Value ot Table
 table_insert(connection, 10, 800)
 
-# Init MQTT Connection
-client = mqtt.Client()
-client.on_connect = on_connect
-client.connect(c_host, c_port, c_timeout)
+
 
 # send a message to the raspberry/topic
 while(True):
