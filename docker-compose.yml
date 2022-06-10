@@ -29,7 +29,7 @@ services:
  
   db:
     image: hypriot/rpi-mysql
-    restart: always
+    #restart: always
     container_name: sysman-db
     environment:
       MYSQL_DATABASE: 'test_database'

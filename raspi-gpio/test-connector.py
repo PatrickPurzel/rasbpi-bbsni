@@ -1,5 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
+import sched
+import threading
 from gpiozero import CPUTemperature
 import mysql.connector
 from mysql.connector import Error
@@ -16,6 +18,11 @@ sql_pw   = "password"
 sql_port = 3306
 sql_db   = "test_database"
 
+#
+s_five = sched.scheduler(time.time, time.sleep)
+s_fivesec = sched.scheduler(time.time, time.sleep)
+
+
 # Create Table if non existent 
 def create_table(table_name):
     insert_txt = "CREATE TABLE IF NOT EXISTS " + str(table_name) + " (data_id INT, temprature FLOAT, time INT)"
@@ -28,9 +35,11 @@ def create_table(table_name):
 def table_insert(table_name):
     # Gets current time in hours and minutes
     current_time = time.strftime("%H%M", time.localtime())
+
     # Gets current CPU temprature
     current_temp = CPUTemperature()
     current_temp = current_temp.temperature
+
     # Construction of the SQL string to write data to the Database table
     insert_txt = "INSERT INTO " + str(table_name) + " (temprature, time) VALUES (%s, %s)"
     insert_val = (current_temp, current_time)
@@ -52,7 +61,6 @@ def pub_send(topic, payload, qos):
 # Connecting to MySQL Database
 def create_connection(host_name, user_name, user_password, host_port, db_name):
     try:
-        #global connection
         conn = mysql.connector.connect(
             host=host_name,
             user=user_name,
@@ -66,17 +74,26 @@ def create_connection(host_name, user_name, user_password, host_port, db_name):
 
     return conn
 
-def run_db():
+def thread_db():
+    s_five.enter(5, 1, run_db, (s_five,))
+    s_five.run()
+
+
+    
+
+def run_db(sc):
     # Insert Value ot Table
     table_insert("test_table1")
+    sc.enter(300, 1, run_db, (sc,))
 
-def run_mqtt():
+def run_mqtt(sc):
     # send a message to the raspberry/topic
     cpu = CPUTemperature()
     #print(cpu.temperature)
     pub_send('raspberry/topic', cpu.temperature, 0)
     time.sleep(1)
     #client.loop_forever()
+    sc.enter(5, 1, run_mqtt, (sc,))
 
 
 def init():
@@ -97,6 +114,14 @@ def init():
 
 def main():
     init()
+
+    x = threading.Thread(target=thread_db)
+    x.start()
+
+    s_fivesec.enter(5, 1, run_mqtt, (s_fivesec,))
+    s_fivesec.run()
+
+
 
 
 if __name__ == '__main__':
