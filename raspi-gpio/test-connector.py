@@ -3,7 +3,6 @@ import time
 from gpiozero import CPUTemperature
 import mysql.connector
 from mysql.connector import Error
-import time
 
 # Define MQTT Broker
 c_host    = "mosquitto"
@@ -25,14 +24,15 @@ def create_table(table_name):
 
     connection.commit()
 
-# Insert Value into given Table
-def table_insert():
+# Insert current CPU Temprature and time into table
+def table_insert(table_name):
+    # Gets current time in hours and minutes
     current_time = time.strftime("%H%M", time.localtime())
-
+    # Gets current CPU temprature
     current_temp = CPUTemperature()
     current_temp = current_temp.temperature
-
-    insert_txt = "INSERT INTO test_table1 (temprature, time) VALUES (%s, %s)"
+    # Construction of the SQL string to write data to the Database table
+    insert_txt = "INSERT INTO " + str(table_name) + " (temprature, time) VALUES (%s, %s)"
     insert_val = (current_temp, current_time)
 
     cursor.execute(insert_txt, insert_val)
@@ -66,6 +66,19 @@ def create_connection(host_name, user_name, user_password, host_port, db_name):
 
     return conn
 
+def run_db():
+    # Insert Value ot Table
+    table_insert("test_table1")
+
+def run_mqtt():
+    # send a message to the raspberry/topic
+    cpu = CPUTemperature()
+    #print(cpu.temperature)
+    pub_send('raspberry/topic', cpu.temperature, 0)
+    time.sleep(1)
+    #client.loop_forever()
+
+
 def init():
     global cursor
     global connection
@@ -82,19 +95,9 @@ def init():
     client.on_connect = on_connect
     client.connect(c_host, c_port, c_timeout)
 
-### MAIN ###
-
-init()
-
-# Insert Value ot Table
-table_insert()
+def main():
+    init()
 
 
-
-# send a message to the raspberry/topic
-while(True):
-    cpu = CPUTemperature()
-    #print(cpu.temperature)
-    pub_send('raspberry/topic', cpu.temperature, 0)
-    time.sleep(1)
-    #client.loop_forever()
+if __name__ == '__main__':
+    main()
