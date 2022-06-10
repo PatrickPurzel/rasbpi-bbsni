@@ -3,31 +3,43 @@ import time
 from gpiozero import CPUTemperature
 import mysql.connector
 from mysql.connector import Error
+import time
 
-# Define MQTT Broker location
-c_host=     "mosquitto"
-c_port=     1883
-c_timeout=  60
+# Define MQTT Broker
+c_host    = "mosquitto"
+c_port    = 1883
+c_timeout = 60
 
-#connection = None
-#cursor = None
-
+# Define MySQL Server
+sql_host = "sysman-db"
+sql_user = "user"
+sql_pw   = "password"
+sql_port = 3306
+sql_db   = "test_database"
 
 # Create Table if non existent 
-def create_table(table_connection, table_name):
-    #cursor = table_connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS test_table1 (data_id INT, temprature FLOAT, time INT)")
+def create_table(table_name):
+    insert_txt = "CREATE TABLE IF NOT EXISTS " + str(table_name) + " (data_id INT, temprature FLOAT, time INT)"
+
+    cursor.execute(insert_txt)
+
     connection.commit()
 
 # Insert Value into given Table
-def table_insert(table_connection, val_temp, val_time):
-    #cursor = table_connection.cursor()
+def table_insert():
+    current_time = time.strftime("%H%M", time.localtime())
+
+    current_temp = CPUTemperature()
+    current_temp = current_temp.temperature
+
     insert_txt = "INSERT INTO test_table1 (temprature, time) VALUES (%s, %s)"
-    insert_val = (val_temp, val_time)
+    insert_val = (current_temp, current_time)
+
     cursor.execute(insert_txt, insert_val)
+
     connection.commit()
 
-#C heck if connection to Database is established
+#Check if connection to Database is established
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
 
@@ -35,7 +47,7 @@ def on_connect(client, userdata, flags, rc):
 def pub_send(topic, payload, qos):
     # the four parameters are topic, sending content, QoS and whether retaining the message respectively
     client.publish(topic, payload=payload, qos=qos, retain=False)
-    print(f"send {payload} to {topic}")
+    #print(f"send {payload} to {topic}")
 
 # Connecting to MySQL Database
 def create_connection(host_name, user_name, user_password, host_port, db_name):
@@ -58,11 +70,11 @@ def init():
     global cursor
     global connection
     global client
-    # Connecting to Database and init process
-    connection = create_connection("sysman-db", "user", "password", 3306, "test_database")
-    cursor = connection.cursor()
 
-    create_table(connection, "test_table1")
+    # Connecting to Database and init process
+    connection = create_connection(sql_host, sql_user, sql_pw, sql_port, sql_db)
+    cursor = connection.cursor()
+    create_table("test_table1")
     
 
     # Init MQTT Connection
@@ -75,14 +87,14 @@ def init():
 init()
 
 # Insert Value ot Table
-table_insert(connection, 10, 800)
+table_insert()
 
 
 
 # send a message to the raspberry/topic
 while(True):
     cpu = CPUTemperature()
-    print(cpu.temperature)
+    #print(cpu.temperature)
     pub_send('raspberry/topic', cpu.temperature, 0)
     time.sleep(1)
     #client.loop_forever()

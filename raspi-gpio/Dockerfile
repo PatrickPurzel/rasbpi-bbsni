@@ -3,6 +3,8 @@ FROM python:alpine3.16
 #DEV - ENV
 #FROM woahbase/alpine-rpigpio:armv7l
 #
+ENV TZ=Europe/Berlin
+
 ARG PUID=1001
 ARG PGID=1001
 #
