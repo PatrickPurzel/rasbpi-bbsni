@@ -56,7 +56,6 @@ def on_connect(client, userdata, flags, rc):
 def pub_send(topic, payload, qos):
     # the four parameters are topic, sending content, QoS and whether retaining the message respectively
     client.publish(topic, payload=payload, qos=qos, retain=False)
-    #print(f"send {payload} to {topic}")
 
 # Connecting to MySQL Database
 def create_connection(host_name, user_name, user_password, host_port, db_name):
@@ -78,9 +77,6 @@ def thread_db():
     s_five.enter(5, 1, run_db, (s_five,))
     s_five.run()
 
-
-    
-
 def run_db(sc):
     # Insert Value ot Table
     table_insert("test_table1")
@@ -89,10 +85,8 @@ def run_db(sc):
 def run_mqtt(sc):
     # send a message to the raspberry/topic
     cpu = CPUTemperature()
-    #print(cpu.temperature)
     pub_send('raspberry/topic', cpu.temperature, 0)
     time.sleep(1)
-    #client.loop_forever()
     sc.enter(5, 1, run_mqtt, (sc,))
 
 

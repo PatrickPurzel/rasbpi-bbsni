@@ -39,7 +39,7 @@
            text-align: center;
            display: block;
            left: 43%;
-           top: 3%
+           top: 1%
        }
        .Projekt:hover{
            background-color: rgb(158, 66, 66);
@@ -50,7 +50,7 @@
            width: 10%;
            font-weight: bold;
            position: absolute;
-           top: 4%;
+           top: 2%;
            right: 30%;
            
        }
@@ -59,7 +59,7 @@
         color:white;      
            font-weight: bold;
            position: absolute;
-           top: 4%;
+           top: 2%;
            right: 30%;
        }
 
@@ -68,7 +68,7 @@
            width: 10%;
            font-weight: bold;
            position: absolute;
-           top: 4%;
+           top: 2%;
            right: 54%;
            
        }
@@ -77,7 +77,7 @@
            color:white;      
            font-weight: bold;
            position: absolute;
-           top: 4%;
+           top: 2%;
            right: 64%;
 
        }
@@ -101,6 +101,73 @@
 
        }
        
+       .dokutxt {
+        background-color: #DDD;
+        color: black;
+        -moz-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        -webkit-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        border-radius: 40px;
+        -moz-border-radius: 40px;
+        -webkit-border-radius: 40px;
+        width: 30%;
+        height: auto;
+        text-align: center;
+        border: solid rgb(64, 107, 46) 5px;
+        padding: 5px;
+        display: inline-block;
+        margin-right: 4%;
+        margin-left: 35%;
+        font-size: large;
+        font-weight: 500;
+        margin-top: 1%;
+        z-index: 1;
+       }
+
+       .dokuuber {
+        background-color: #DDD;
+        color: black;
+        -moz-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        -webkit-box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        box-shadow: inset 0 0 15px 5px rgb(128, 126, 126);
+        border-radius: 40px;
+        -moz-border-radius: 40px;
+        -webkit-border-radius: 40px;
+        width: 25%;
+        height: auto;
+        text-align: center;
+        border: solid rgb(64, 107, 46) 5px;
+        padding: 5px;
+        display: inline-block;
+        margin-right: 4%;
+        margin-left: 38%;
+        font-size: large;
+        font-weight: bold;
+        z-index: 2;
+
+       }
+
+       .code1 {
+        position: absolute;
+            margin-right: 20%;
+            left: 1%;
+            top: 10%;
+            opacity: 0.5;
+       }
+
+       .code2{
+        position: absolute;
+          top: 10%;
+           right: 1%;
+           z-index: -1;
+           opacity: 0.5;
+       }
+
+       .dokubild {
+        position: absolute;
+        right: 20%;
+        margin-top: 2%;
+       }
 </style>
 
 </head>
@@ -116,6 +183,48 @@
         </div>
     </a>
     </h1>
+<div class="dokuuber"> Unsere Doku 
+
+</div>
+<div class="dokutxt"> 
+    docker-compose.yml <br>
+    Services: <br>
+    <br>
+    •   <u> Probe:<br> </u>
+    o    Wird erstellt aus „raspi-gpio/Dockerfile“ <br>
+    o    Wartet bis die Datenbank gestartet ist <br>
+    o    Volumes werden gemappt zum auslesen der CPU Temperatur <br>
+    o    Verbunden mit dem Dockernetzwerk „python-netzwerk“<br>
+    <br>
+    •  <u>  Web:<br> </u>
+    o    Nutzt nginx Image<br>
+    o    „./site-content“  beinhaltet alle Dateien für die Website<br>
+    o    Port 8080 wird freigeben um sich mit dem Webserver zu verbinden<br>
+    o    Verbunden mit dem Dockernetzwerk „python-netzwerk“<br>
+    <br>
+    •  <u>  DB:<br> </u>
+    o    Nutzt Image hypriot/rpi-mysql<br>
+    o    Es wird eine Datenbank erstellt, sowie ein zugehöriger User<br>
+    o    Als Port wird hier 33306 genutzt<br>
+    o    Die Datenbank wird dann in dem Volume „my-db“ gespeichert<br>
+    <br>
+    •  <u>  Mosquitto:<br> </u>
+    o    eclipse-mosquitto Image wird genutzt<br>
+    o    auf dem MQTT Port 1883<br>
+    o    das Directory „mqtt-broker“ wird gemappt um die Configuration zu übergeben<br>
+    o    Verbunden mit dem Dockernetzwerk „python-netzwerk“<br>
+    <br>
+    • <u>   Grafana:<br> </u>
+    o    grafana/grafana-oss wird genutzt zur Visualisierung<br>
+    o    hier wird eine Default User definiert sowie das Embedding in Websites erlaubt<br>
+    o    Verbunden mit dem Dockernetzwerk „python-netzwerk“<br>
+    <br>
+    <u> Dockerfile:<br> </u>
+    •    python:alpine3.16 wird als Grundlage genutzt, da dieses eine schlanke Python Plattform bietet<br>
+    •    Es wird eine requirements.txt wird importiert, um im Anschluss alle benötigten Python Module herunterzuladen<br>
+    •    Nun wird das Python Script importiert und nach dem Start ausgeführt<br>
+
+</div>    
     
     <div class="Task-1"> <a href="DasProjekt.html"> |Das Projekt| </a> </div>
     <div class="Task-2"> <a href="RaspberryPi.html"> |Raspberry Pi| </a> </div>
@@ -124,6 +233,9 @@
 
 </div>
 
+<img src="code1.jpg" class="code1">
+<img src="code4.jpg" class="code2">
+<img src="bülddökü.jpg" class="dokubild">
 <img src="https://wallpapercave.com/wp/wp1864223.jpg"
 class="hintergrund">
 </body>
