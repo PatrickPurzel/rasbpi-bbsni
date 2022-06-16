@@ -25,7 +25,7 @@ s_fivesec = sched.scheduler(time.time, time.sleep)
 
 # Create Table if non existent 
 def create_table(table_name):
-    insert_txt = "CREATE TABLE IF NOT EXISTS " + str(table_name) + " (data_id INT, temprature FLOAT, time INT)"
+    insert_txt = "CREATE TABLE IF NOT EXISTS " + str(table_name) + " (id INT NOT NULL AUTO_INCREMENT, time datetime, temprature FLOAT, PRIMARY KEY (id))"
 
     cursor.execute(insert_txt)
 
@@ -34,7 +34,7 @@ def create_table(table_name):
 # Insert current CPU Temprature and time into table
 def table_insert(table_name):
     # Gets current time in hours and minutes
-    current_time = time.strftime("%H%M", time.localtime())
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     # Gets current CPU temprature
     current_temp = CPUTemperature()
@@ -84,7 +84,7 @@ def thread_db():
 def run_db(sc):
     # Insert Value ot Table
     table_insert("test_table1")
-    sc.enter(300, 1, run_db, (sc,))
+    sc.enter(5, 1, run_db, (sc,))
 
 def run_mqtt(sc):
     # send a message to the raspberry/topic
